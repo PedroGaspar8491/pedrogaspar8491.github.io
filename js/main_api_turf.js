@@ -595,7 +595,7 @@ function init() {
 		projection: view.getProjection(),
 	  });
 
-	  geolocation.setTracking(true);
+	  //geolocation.setTracking(true);
 
 	  // handle geolocation error.
 	  geolocation.on('error', function (error) {
@@ -607,7 +607,9 @@ function init() {
 	  geolocation.on('change:position', function () {
 		const coordinates = geolocation.getPosition();
 		console.log(coordinates);
-		console.log(ol.proj.transform(coordinates,'EPSG:3857', 'EPSG:4326'));
+		coordinates= ol.proj.transform(coordinates,'EPSG:3857', 'EPSG:4326');
+		const x = coordinates[0];
+		const y = coordinates[1];
 	  });
 }
 
