@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+
+<html>
+	<head>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-FJ15NEH75M"></script>
+		<script>
+  	window.dataLayer = window.dataLayer || [];
+  	function gtag(){dataLayer.push(arguments);}
+ 	 gtag('js', new Date());
+
+  	gtag('config', 'G-FJ15NEH75M');
+	</script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta property="og:description" content="Teste API routing">
+		<meta property="og:image"
+			content="https://gis4cloud.com/exemplos/sptempo/img/isocronas.jpg" />
+		<meta property="og:url" content="https://gis4cloud.com/exemplos/sptempo/" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="Teste API routing" />
+		<link rel="image_src"
+			href="https://gis4cloud.com/exemplos/sptempo/img/isocronas.jpg" />
+		<meta property="og:image:width" content="3078">
+		<meta property="og:image:height" content="1628">
+		<meta property="og:image"
+			content="https://gis4cloud.com/exemplos/sptempo/img/isocronas.jpg"/>
+		<script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+		<link rel='stylesheet' href='./css/main.css'>
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script
+			src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js'></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.js"></script>
+		<!--	<script src='./js/main.js'></script>-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"
+			integrity="sha512-Q7HOppxoH0L2M7hreVoFCtUZimR2YaY0fBewIYzkCgmNtgOOZ5IgMNYxHgfps0qrO1ef5m7L1FeHrhXlq1I9HA=="
+			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src='./js/main_api_turf.js'></script>
+		<link rel='stylesheet'
+			href='./js/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css'>
+		<script src='./js/node_modules/bootstrap-slider/js/bootstrap-slider.js'></script>
+		<link rel="stylesheet" href="./css/ol-ext.css" />
+		<script type="text/javascript" src="./js/ol-ext.js"></script>
+
+
+		<title>Futvouga</title>
+		<style>
+			html {width:100%; height:100%; margin:0;}
+			body {width:100%; height:100%; margin:0; font-family:sans-serif;}
+			#mapa {width:100%; height:100%; margin:0; z-index:0}
+			#toolbox{position:absolute; top:8px; right:50px; padding:3px; border-radius:4px;}
+			#sl1Slider .slider-selection {
+				background: #BABABA;
+
+			/* popup style */
+			.ol-popup {
+      			max-width:300px;
+      			min-width:100px;
+     		 	min-height:1em;
+    		}
+    		/* Image on popup */
+    		.ol-popup img {
+      			float: left;
+      			margin: 0 0.5em 0 0;
+      			max-width: 100px;
+      			max-height: 100px;
+    		}
+
+			}
+
+		</style>
+	</head>
+
+	<body onload="init()">
+		<div id="toolbox" style="position:absolute; top:8px; right:90px; padding:3px;
+			border-radius:4px; color:#fff; background: rgba(255, 255, 255, 0.4);
+			z-index:100;">
+			<ul id="layerswitcher" style="margin:0; padding:10px; border-radius:4px;
+				background:rgba(0, 60, 136, 0.5); list-style-type:none;">
+				<li><label><input type="radio" name="layer" value="0" checked> Satélite</label></li>
+				<li><label><input type="radio" name="layer" value="1"> Mapa</label></li>
+			</ul>
+		</div>
+		<div id="estadios" style="position:absolute; top:8px; left:90px; padding:3px;
+			border-radius:4px; color:#fff; background: rgba(255, 255, 255, 0.4);
+			z-index:100;">
+			<ul id="escolhaEstadios" style="margin:0; padding:10px; border-radius:4px;
+				background:rgba(0, 60, 136, 0.5); list-style-type:none;">
+				<li><label><input type="checkbox" name="layer" value="0" checked> Estadio 1</label></li>
+				<li><label><input type="checkbox" name="layer" value="0"> Estádio 2</label></li>
+			</ul>
+		</div>
+		<div id='mapa' style="width:100%; height:100%; z-index: 0">
+			<div id="toolbox1" class="btn-toolbar" style="position:absolute; top:150px;
+				right:50px; padding:3px; border-radius:4px; color:#fff; background:
+				rgba(255, 255, 255, 0.4); z-index:100;">
+				<div id="meio_transporte" class="btn-group" data-toggle="buttons"
+					style="margin:0; padding:10px; border-radius:4px; background:rgba(0, 60,
+					136, 0.5);">
+					<label class="btn btn-default active">
+						<input type="radio" class="btn btn-default active" name="options" checked
+							id="option1" value="ape">A pé
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" class="btn btn-default" name="options" id="option2"
+							value="bicicleta">Bicicleta
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" class="btn btn-default" name="options" id="option3"
+							value="carro">Automóvel
+					</label>
+				</div>
+
+			</div>
+
+			<div id="container_slider" style="position:absolute; top:250px; right:60px;
+				padding:3px; border-radius:4px; color:#fff; z-index:100;"> <div
+					id="sliderdiv">
+					<input id="sl1" type="text" data-slider-id='sl1Slider' type="text"
+						data-slider-min="5" data-slider-max="60" data-slider-step="5"
+						data-slider-value="15">
+				</div>
+				<div id='credits' class="credits" style="z-index:100;">
+					<a href="mailto:luisjorge@ua.pt">@Luís Jorge Gonçalves</a>
+				</div>
+				<script>
+			$("#sl1").slider({
+  				 formatter: function(value) {
+       			return value + ' min';
+   				},
+   				tooltip: 'always'
+}			);
+		</script>
+
+
+
+			</body>
+		</html>
