@@ -155,7 +155,7 @@ function init() {
 	});
 
 	$.ajax({
-		url: './scripts/estadios_turf.php', async: false, success: function (dados) {
+		url: 'https://www.gis4cloud.com/grupo5_ptas2024/scripts/estadios_turf.php', async: false, success: function (dados) {
 			sourceEstadios.clear();
 			var features = geojsonFormat.readFeatures(dados);
 			estadios_turf = geojsonFormat.writeFeaturesObject(features);
