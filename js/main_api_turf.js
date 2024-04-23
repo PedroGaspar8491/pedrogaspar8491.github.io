@@ -607,6 +607,7 @@ function init() {
 	  geolocation.on('change:position', function () {
 		const coordinates = geolocation.getPosition();
 		console.log(coordinates);
+		console.log(ol.proj.transform(coordinates,'EPSG:3857', 'EPSG:4326'));
 	  });
 }
 
