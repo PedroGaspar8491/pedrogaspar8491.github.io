@@ -595,6 +595,8 @@ function init() {
 		projection: view.getProjection(),
 	  });
 
+	  geolocation.setTracking(true);
+
 	  // handle geolocation error.
 	  geolocation.on('error', function (error) {
 		const info = document.getElementById('info');
