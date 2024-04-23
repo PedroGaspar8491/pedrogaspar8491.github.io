@@ -587,7 +587,7 @@ function init() {
 	})
 
 	// Geolocation
-	const geolocation = new Geolocation({
+	const geolocation = new ol.Geolocation({
 		// enableHighAccuracy must be set to true to have the heading value.
 		trackingOptions: {
 		  enableHighAccuracy: true,
