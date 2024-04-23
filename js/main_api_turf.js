@@ -606,7 +606,6 @@ function init() {
 	  
 	  geolocation.on('change:position', function () {
 		const coordinates = geolocation.getPosition();
-		positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
 		console.log(coordinates);
 	  });
 }
