@@ -87,7 +87,7 @@ function init() {
 
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
-		//coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
 		x_start = coordinates[0];
 		y_start = coordinates[1];
 		console.log(coordinates);
@@ -95,7 +95,7 @@ function init() {
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
 	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[' + x_start + ',' + y_start + '],' +
+		'{"locations":[{"lat":' + y_start + ',"lon":' + x_start + '}],' +
 		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
