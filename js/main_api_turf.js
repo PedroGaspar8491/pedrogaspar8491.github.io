@@ -11,30 +11,6 @@ var y_start;
 
 function init() {
 
-	// Geolocation
-	const geolocation = new ol.Geolocation({
-		// enableHighAccuracy must be set to true to have the heading value.
-		trackingOptions: {
-			enableHighAccuracy: true,
-		},
-		projection: view.getProjection(),
-	});
-
-	geolocation.setTracking(true);
-
-	// handle geolocation error.
-	geolocation.on('error', function (error) {
-		console.log(error.message);
-	});
-
-	geolocation.on('change:position', function () {
-		const coordinates = geolocation.getPosition();
-		console.log(coordinates);
-		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
-		x_start = coordinates[0];
-		y_start = coordinates[1];
-	});
-
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
 		popupClass: "default anim", //"tooltips", "warning" "black" "default", "tips", "shadow",
@@ -91,6 +67,30 @@ function init() {
 	var hull = new ol.layer.Vector({
 		title: 'hull',
 		source: source_hull
+	});
+
+	// Geolocation
+	const geolocation = new ol.Geolocation({
+		// enableHighAccuracy must be set to true to have the heading value.
+		trackingOptions: {
+			enableHighAccuracy: true,
+		},
+		projection: view.getProjection(),
+	});
+
+	geolocation.setTracking(true);
+
+	// handle geolocation error.
+	geolocation.on('error', function (error) {
+		console.log(error.message);
+	});
+
+	geolocation.on('change:position', function () {
+		const coordinates = geolocation.getPosition();
+		console.log(coordinates);
+		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+		x_start = coordinates[0];
+		y_start = coordinates[1];
 	});
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
