@@ -117,6 +117,7 @@ function init() {
 	map.addLayer(hull);
 	//Fazer o "zoom to layer" à isócrona
 	var extent = source_hull.getExtent();
+	console.log(extent);
 	map.getView().fit(extent);
 
 
