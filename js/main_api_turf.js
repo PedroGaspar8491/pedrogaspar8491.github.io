@@ -6,6 +6,8 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
+var x_start;
+var y_start;
 
 function init() {
 
@@ -42,7 +44,7 @@ function init() {
 	//Definição da "view" do mapa
 	var view = new ol.View({
 		projection: 'EPSG:3857',
-		center: ol.proj.transform([ -8.651697, 40.641121], 'EPSG:4326', 'EPSG:3857'),
+		center: ol.proj.transform([-8.651697, 40.641121], 'EPSG:4326', 'EPSG:3857'),
 		//extent: [-982195.7341678787, 4910200.594997236, -909505.2644025753, 5016168.94481226],
 		zoom: 12,
 		minZoom: 4,
@@ -67,9 +69,9 @@ function init() {
 		source: source_hull
 	});
 
-	// Chamada inicial à API, a pé, com coordenadas da UA
+	// Chamada inicial à API, a pé, com coordenadas do geolocation
 	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":40.641121,"lon":-8.651697}],' +
+		'{"locations":[' + x_start + ',' + y_start +'],' +
 		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
@@ -128,7 +130,7 @@ function init() {
 				src: './img/ji.png'
 			}))
 		})];
-		
+
 		return function (feature, resolution) {
 			switch (feature.get('tipo')) {
 				case 'A':
@@ -569,7 +571,7 @@ function init() {
 			return layer.get('selectable') == true;
 		}
 	});
-	
+
 	//Para o popup
 	map.addInteraction(select);
 	hull.set('selectable', false);
@@ -590,26 +592,25 @@ function init() {
 	const geolocation = new ol.Geolocation({
 		// enableHighAccuracy must be set to true to have the heading value.
 		trackingOptions: {
-		  enableHighAccuracy: true,
+			enableHighAccuracy: true,
 		},
 		projection: view.getProjection(),
-	  });
+	});
 
-	  geolocation.setTracking(true);
+	geolocation.setTracking(true);
 
-	  // handle geolocation error.
-	  geolocation.on('error', function (error) {
-		const info = document.getElementById('info');
-		info.innerHTML = error.message;
-		info.style.display = '';
-	  });
-	  
-	  geolocation.on('change:position', function () {
+	// handle geolocation error.
+	geolocation.on('error', function (error) {
+		console.log(error.message);
+	});
+
+	geolocation.on('change:position', function () {
 		const coordinates = geolocation.getPosition();
 		console.log(coordinates);
-		coordinates= ol.proj.transform(coordinates,'EPSG:3857', 'EPSG:4326');
-		const x = coordinates[0];
-		const y = coordinates[1];
-	  });
+		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+		x_start = coordinates[0];
+		y_start = coordinates[1];
+	});
+
 }
 
