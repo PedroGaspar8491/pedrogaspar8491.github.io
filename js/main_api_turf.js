@@ -87,7 +87,7 @@ function init() {
 
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
-		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+		//coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
 		x_start = coordinates[0];
 		y_start = coordinates[1];
 		console.log(coordinates);
