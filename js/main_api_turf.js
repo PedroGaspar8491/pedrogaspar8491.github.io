@@ -6,8 +6,6 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
-var x_start;
-var y_start;
 
 function init() {
 
@@ -88,8 +86,8 @@ function init() {
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
 		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
-		x_start = coordinates[0];
-		y_start = coordinates[1];
+		var x_start = coordinates[0];
+		var y_start = coordinates[1];
 		console.log(coordinates);
 	});
 
