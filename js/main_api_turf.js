@@ -9,30 +9,6 @@ var geojsonFormat = new ol.format.GeoJSON();
 var x_start;
 var y_start;
 
-// Geolocation
-const geolocation = new ol.Geolocation({
-	// enableHighAccuracy must be set to true to have the heading value.
-	trackingOptions: {
-		enableHighAccuracy: true,
-	},
-	projection: view.getProjection(),
-});
-
-geolocation.setTracking(true);
-
-// handle geolocation error.
-geolocation.on('error', function (error) {
-	console.log(error.message);
-});
-
-geolocation.on('change:position', function () {
-	var coordinates = geolocation.getPosition();
-	coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
-	x_start = coordinates[0];
-	y_start = coordinates[1];
-	console.log(coordinates);
-});
-
 function init() {
 
 	// Popup overlay com popupClass=anim
@@ -93,13 +69,37 @@ function init() {
 		source: source_hull
 	});
 
+	// Geolocation
+	const geolocation = new ol.Geolocation({
+		// enableHighAccuracy must be set to true to have the heading value.
+		trackingOptions: {
+			enableHighAccuracy: true,
+		},
+		projection: view.getProjection(),
+	});
+
+	geolocation.setTracking(true);
+
+	// handle geolocation error.
+	geolocation.on('error', function (error) {
+		console.log(error.message);
+	});
+
+	geolocation.on('change:position', function () {
+		var coordinates = geolocation.getPosition();
+		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
+		x_start = coordinates[0];
+		y_start = coordinates[1];
+		console.log(coordinates);
+	});
+
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
 	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 		'{"locations":[{"lat":' + y_start + ',"lon":' + x_start + '}],' +
 		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
-		url: routing_url, async: false, success: function (dados) {
+		url: routing_url, async: true, success: function (dados) {
 			//limpar a source, se existir isócrona
 			source_hull.clear();
 			//ler resultado da chamada à API (geojson)
