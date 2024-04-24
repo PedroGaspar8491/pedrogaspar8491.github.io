@@ -87,10 +87,10 @@ function init() {
 
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
-		console.log(coordinates);
 		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
 		x_start = coordinates[0];
 		y_start = coordinates[1];
+		console.log(coordinates);
 	});
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
