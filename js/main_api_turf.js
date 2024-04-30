@@ -121,8 +121,8 @@ function init() {
 	//Adicionar a isócrona ao mapa
 	map.addLayer(hull);
 	//Fazer o "zoom to layer" à isócrona
-	var extent = source_hull.getExtent();
-	map.getView().fit(extent);
+	//var extent = source_hull.getExtent();
+	//map.getView().fit(extent);
 
 
 	// Função de estilo para os estadios
