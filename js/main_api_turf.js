@@ -22,6 +22,16 @@ function init() {
 	console.log(x_dest);
 	console.log(y_dest);
 
+	estadio_select.addEventListener("change", function () {
+		estadio = estadio_select.options[estadio_select.selectedIndex].value;
+		estadio = estadio.split(",");
+		x_dest = parseFloat(estadio[0]);
+		y_dest = parseFloat(estadio[1]);
+
+		console.log(x_dest);
+		console.log(y_dest);
+	})
+
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
 		popupClass: "default anim", //"tooltips", "warning" "black" "default", "tips", "shadow",
