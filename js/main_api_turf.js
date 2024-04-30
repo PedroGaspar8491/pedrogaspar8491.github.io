@@ -6,9 +6,11 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
-var estadio_select = document.getElementById("estadio");
+var estadio_select;
 
 function init() {
+
+	estadio_select = document.getElementById("estadio");
 
 	var estadio = estadio_select.options[estadio_select.selectedIndex].value;
 
