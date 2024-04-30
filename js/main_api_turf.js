@@ -12,13 +12,6 @@ var y_dest;
 
 function init() {
 
-	estadio_select = document.getElementById("estadio");
-
-	var estadio = estadio_select.options[estadio_select.selectedIndex].value;
-	estadio = estadio.split(",");
-	x_dest = parseFloat(estadio[0]);
-	y_dest = parseFloat(estadio[1]);
-
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
 		popupClass: "default anim", //"tooltips", "warning" "black" "default", "tips", "shadow",
@@ -97,30 +90,6 @@ function init() {
 		var coordinates = geolocation.getPosition();
 		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
 	});
-
-	// Chamada inicial à API, a pé, com coordenadas do geolocation
-	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":40.641121,"lon": -8.651697}],' +
-		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
-
-	$.ajax({
-		url: routing_url, async: true, success: function (dados) {
-			//limpar a source, se existir isócrona
-			source_hull.clear();
-			//ler resultado da chamada à API (geojson)
-			var features = geojsonFormat.readFeatures(dados);
-			//transformar para oneto turf.js
-			hull_turf = geojsonFormat.writeFeaturesObject(features);
-			//voltar a transformar para objeto openlayers (transformando o sistema de coordenadas)
-			source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-				dataProjection: 'EPSG:4326',
-				featureProjection: 'EPSG:3857'
-			}));
-		}
-	});
-	//Adicionar a isócrona ao mapa
-	map.addLayer(hull);
-
 
 	// Função de estilo para os estadios
 	var criarEstilosTipo = (function () {
