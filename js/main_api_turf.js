@@ -100,7 +100,7 @@ function init() {
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
 	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":' + y_dest + ',"lon":' + x_dest + '}],' +
+		'{"locations":[{"lat":40.641121,"lon": -8.651697}],' +
 		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
