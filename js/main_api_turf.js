@@ -13,6 +13,8 @@ function init() {
 	estadio_select = document.getElementById("estadio");
 
 	var estadio = estadio_select.options[estadio_select.selectedIndex].value;
+	console.log(estadio);
+	console.log(estadio[0]);
 
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
