@@ -19,6 +19,9 @@ function init() {
 	x_dest = parseFloat(estadio[0]);
 	y_dest = parseFloat(estadio[1]);
 
+	console.log(x_dest);
+	console.log(y_dest);
+
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
 		popupClass: "default anim", //"tooltips", "warning" "black" "default", "tips", "shadow",
@@ -96,7 +99,6 @@ function init() {
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
 		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
-		console.log(coordinates);
 	});
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
