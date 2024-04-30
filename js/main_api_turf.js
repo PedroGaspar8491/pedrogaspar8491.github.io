@@ -6,7 +6,7 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
-var estadio_select = document.getElementById("estadio");
+var estadio_select;
 var x_dest;
 var y_dest;
 
@@ -466,6 +466,8 @@ function init() {
 	select.getFeatures().on(['remove'], function (e) {
 		popup.hide();
 	})
+
+	estadio_select = document.getElementById("estadio");
 
 	estadio_select.addEventListener("change", function () {
 		estadio = estadio_select.options[estadio_select.selectedIndex].value;
