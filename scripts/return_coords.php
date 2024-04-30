@@ -14,7 +14,7 @@ if(!$db_connection){
     echo "Erro na conexão à BD!";
 }
 
-$result = pg_query($db_connection, "SELECT x,y FROM estadios_aveiro WHERE nome ILIKE ") or die('Query failed: ' . pg_last_error());
+$result = pg_query($db_connection, "SELECT x,y FROM amenities") or die('Query failed: ' . pg_last_error());
 
 echo pg_fetch_assoc($result)["jsonb_build_object"];
 

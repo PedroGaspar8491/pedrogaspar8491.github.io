@@ -144,6 +144,19 @@ function init() {
 		projection: 'EPSG:4326',
 	});
 
+	var sourceAmenity = new ol.source.Vector({
+		format: new ol.format.GeoJSON,
+		projection: "ESPG:4326",
+	});
+
+	$.ajax({
+		url: 'https://www.gis4cloud.com/grupo5_ptas2024/scripts/estadios_turf.php', async: false, success: function (dados) {
+			sourceEstadios.clear();
+			var features = geojsonFormat.readFeatures(dados);
+			estadios_turf = geojsonFormat.writeFeaturesObject(features);
+		}
+	});
+
 	var estadiosLayer = new ol.layer.Vector({
 		title: 'Estadios',
 		nome: 'estadios_layer',
@@ -159,7 +172,7 @@ function init() {
 		}
 	});
 	//calcular com turf.js os estadios que estão dentro da isócrona
-	//estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+	amenitiesDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
@@ -209,7 +222,6 @@ function init() {
 	console.log(opção);
 	coordenadas_4326[0] = -8.657054901123049;
 	coordenadas_4326[1] = 40.631835142937256;
-	pontoInicial.setGeometry(new ol.geom.Point([-963705.332976185, 4958180.85218552]));
 	console.log($('#sl1').val());
 
 	$("input[type='radio']").change(function () {
