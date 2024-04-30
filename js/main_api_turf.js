@@ -6,7 +6,7 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
-var estadio_select;
+var estadio_select = document.getElementById("estadio");
 var x_dest;
 var y_dest;
 
