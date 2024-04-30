@@ -120,9 +120,6 @@ function init() {
 	});
 	//Adicionar a isócrona ao mapa
 	map.addLayer(hull);
-	//Fazer o "zoom to layer" à isócrona
-	//var extent = source_hull.getExtent();
-	//map.getView().fit(extent);
 
 
 	// Função de estilo para os estadios
@@ -421,123 +418,7 @@ function init() {
 			}
 		});
 
-	// Registar um listener "click" no mapa.
-
-	map.on('click', function (event) {
-		console.log($("input[name='options']:checked").val());
-		pontoInicial.setGeometry(null);
-		hull.setVisible(false);
-		estadiosLayer.setVisible(false);
-
-		if (pontoInicial.getGeometry() == null) {
-			console.log(event.coordinate);
-			coordenadas_3857 = event.coordinate;
-			coordenadas_4326 = (ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326'));
-			console.log(coordenadas_4326);
-
-			pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
-
-			if (opção == 'carro') {
-				var d = $('#sl1').val();
-				var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
-					'"costing":"auto","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
-
-				$.ajax({
-					url: routing_url, async: false, success: function (dados) {
-						source_hull.clear();
-						sourceEstadios.clear();
-						var features = geojsonFormat.readFeatures(dados);
-						hull_turf = geojsonFormat.writeFeaturesObject(features);
-
-						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-							dataProjection: 'EPSG:4326',
-							featureProjection: 'EPSG:3857'
-						}));
-					}
-				});
-
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
-				console.log(estadiosDentroHull);
-				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
-					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
-				}));
-				var extent = hull.getSource().getExtent();
-				map.getView().fit(extent);
-				hull.setVisible(true);
-				estadiosLayer.setVisible(true);
-				layerVetorial.setVisible(true);
-
-			} else if ($("input[name='options']:checked").val() == 'ape') {
-				var d = $('#sl1').val();
-				var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
-					'"costing":"pedestrian","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
-
-				$.ajax({
-					url: routing_url, async: false, success: function (dados) {
-						source_hull.clear();
-						sourceEstadios.clear();
-						var features = geojsonFormat.readFeatures(dados);
-						hull_turf = geojsonFormat.writeFeaturesObject(features);
-
-						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-							dataProjection: 'EPSG:4326',
-							featureProjection: 'EPSG:3857'
-						}));
-					}
-				});
-
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
-				console.log(estadios_turf);
-				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
-					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
-				}));
-				var extent = hull.getSource().getExtent();
-				map.getView().fit(extent);
-				hull.setVisible(true);
-				pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
-				layerVetorial.setVisible(true);
-				estadiosLayer.setVisible(true);
-
-			} else if (opção == 'bicicleta') {
-				var d = $('#sl1').val();
-				var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
-					'"costing":"bicycle","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
-
-				$.ajax({
-					url: routing_url, async: false, success: function (dados) {
-						source_hull.clear();
-						sourceEstadios.clear();
-						var features = geojsonFormat.readFeatures(dados);
-						hull_turf = geojsonFormat.writeFeaturesObject(features);
-
-						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-							dataProjection: 'EPSG:4326',
-							featureProjection: 'EPSG:3857'
-						}));
-					}
-				});
-
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
-				console.log(estadios_turf);
-				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
-					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
-				}));
-				var extent = hull.getSource().getExtent();
-				map.getView().fit(extent);
-				hull.setVisible(true);
-				pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
-				layerVetorial.setVisible(true);
-				estadiosLayer.setVisible(true);
-			}
-		}
-	});
-
+	
 	//Controlos
 	//Attribution ("referências")
 	var omeuControloAttribution = new ol.control.Attribution({
