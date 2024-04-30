@@ -9,8 +9,6 @@ var geojsonFormat = new ol.format.GeoJSON();
 var estadio = document.getElementById("estadio").value;
 
 function init() {
-	var x_start = estadio[0];
-	var y_start = estadio[1];
 
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
@@ -89,14 +87,12 @@ function init() {
 	geolocation.on('change:position', function () {
 		var coordinates = geolocation.getPosition();
 		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
-		x_start = estadio[0];
-		y_start = estadio[1];
 		console.log(coordinates);
 	});
 
 	// Chamada inicial à API, a pé, com coordenadas do geolocation
 	var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":' + y_start + ',"lon":' + x_start + '}],' +
+		'{"locations":[{"lat":' + estadio[1] + ',"lon":' + estadio[0] + '}],' +
 		'"costing":"pedestrian","polygons":true,"contours":[{"time":20.0,"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
