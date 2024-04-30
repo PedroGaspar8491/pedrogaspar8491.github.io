@@ -159,7 +159,7 @@ function init() {
 		}
 	});
 	//calcular com turf.js os estadios que estão dentro da isócrona
-	estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+	//estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
