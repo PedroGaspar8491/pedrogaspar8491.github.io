@@ -467,6 +467,8 @@ function init() {
 		popup.hide();
 	})
 
+	map.addLayer(hull);
+
 	estadio_select = document.getElementById("estadio");
 
 	estadio_select.addEventListener("change", function () {
@@ -482,7 +484,7 @@ function init() {
 		if (pontoInicial.getGeometry() == null) {
 			coordenadas_4326 = [x_dest, y_dest];
 			console.log(coordenadas_4326);
-			coordenadas_3857 = [x_dest, y_dest];
+			coordenadas_3857 = [ol.transform(x_dest), y_dest];
 
 
 			if (opção == 'carro') {
