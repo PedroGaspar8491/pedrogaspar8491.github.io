@@ -13,6 +13,7 @@ function init() {
 	estadio_select = document.getElementById("estadio");
 
 	var estadio = estadio_select.options[estadio_select.selectedIndex].value;
+	estadio = estadio.split(",");
 	console.log(estadio);
 	console.log(estadio[0]);
 
@@ -120,7 +121,6 @@ function init() {
 	map.addLayer(hull);
 	//Fazer o "zoom to layer" à isócrona
 	var extent = source_hull.getExtent();
-	console.log(source_hull);
 	map.getView().fit(extent);
 
 
