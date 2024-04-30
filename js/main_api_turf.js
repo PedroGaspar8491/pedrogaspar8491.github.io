@@ -484,7 +484,7 @@ function init() {
 		if (pontoInicial.getGeometry() == null) {
 			coordenadas_4326 = [x_dest, y_dest];
 			console.log(coordenadas_4326);
-			coordenadas_3857 = [ol.transform(x_dest), y_dest];
+			coordenadas_3857 = [x_dest, y_dest];
 
 
 			if (opção == 'carro') {
