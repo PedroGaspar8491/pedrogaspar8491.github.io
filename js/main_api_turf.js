@@ -475,9 +475,7 @@ function init() {
 		x_dest = parseFloat(estadio[0]);
 		y_dest = parseFloat(estadio[1]);
 
-		pontoInicial.setGeometry(null);
-		hull.setVisible(false);
-		estadiosLayer.setVisible(false);
+		pontoInicial.setGeometry(null);	
 
 		if (pontoInicial.getGeometry() == null) {
 			coordenadas_4326 = [x_dest, y_dest]
