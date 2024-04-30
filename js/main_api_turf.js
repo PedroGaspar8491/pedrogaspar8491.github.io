@@ -6,12 +6,11 @@ var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
 var geojsonFormat = new ol.format.GeoJSON();
-var x_start;
-var y_start;
-var estadio = document.getElementById("estadio").innerHTML;
+var estadio = document.getElementById("estadio").value;
 
 function init() {
-
+	var x_start = estadio[0];
+	var y_start = estadio[1];
 
 	// Popup overlay com popupClass=anim
 	var popup = new ol.Overlay.Popup({
