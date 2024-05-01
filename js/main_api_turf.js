@@ -354,7 +354,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -367,9 +367,9 @@ function init() {
 				});
 
 				var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
-				'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '}],' +
-				'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
-				'"costing":"auto","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
+					'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '}],' +
+					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+					'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"miles","id":"my_work_route"}';
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
@@ -408,7 +408,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -445,7 +445,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -504,7 +504,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -541,7 +541,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -578,7 +578,7 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						
+
 						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -638,7 +638,7 @@ function init() {
 					$.ajax({
 						url: hull_url, async: false, success: function (dados) {
 							source_hull.clear();
-							
+
 							sourceAmenity.clear();
 							var features = geojsonFormat.readFeatures(dados);
 							hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -675,7 +675,7 @@ function init() {
 					$.ajax({
 						url: hull_url, async: false, success: function (dados) {
 							source_hull.clear();
-							
+
 							sourceAmenity.clear();
 							var features = geojsonFormat.readFeatures(dados);
 							hull_turf = geojsonFormat.writeFeaturesObject(features);
@@ -712,7 +712,7 @@ function init() {
 					$.ajax({
 						url: hull_url, async: false, success: function (dados) {
 							source_hull.clear();
-							
+
 							sourceAmenity.clear();
 							var features = geojsonFormat.readFeatures(dados);
 							hull_turf = geojsonFormat.writeFeaturesObject(features);
