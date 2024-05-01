@@ -264,6 +264,7 @@ function init() {
 				map.getView().fit(extent);
 				hull.setVisible(true);
 				estadiosLayer.setVisible(true);
+				amenitiesLayer.setVisible(true);
 			} else if (opção == 'ape') {
 				var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
@@ -296,6 +297,7 @@ function init() {
 				map.getView().fit(extent);
 				hull.setVisible(true);
 				estadiosLayer.setVisible(true);
+				amenitiesLayer.setVisible(true);
 			} else if (opção == 'bicicleta') {
 				var routing_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
@@ -327,6 +329,7 @@ function init() {
 				map.getView().fit(extent);
 				hull.setVisible(true);
 				estadiosLayer.setVisible(true);
+				amenitiesLayer.setVisible(true);
 			}
 		});
 
@@ -423,6 +426,7 @@ function init() {
 		pontoInicial.setGeometry(null);
 		hull.setVisible(false);
 		estadiosLayer.setVisible(false);
+		amenitiesLayer.setVisible(false);
 
 		if (pontoInicial.getGeometry() == null) {
 			coordenadas_4326 = [x_dest, y_dest];
@@ -459,6 +463,7 @@ function init() {
 				hull.setVisible(true);
 				estadiosLayer.setVisible(true);
 				layerVetorial.setVisible(true);
+				amenitiesLayer.setVisible(true);
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
 				var d = $('#sl1').val();
@@ -489,6 +494,7 @@ function init() {
 				pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
 				layerVetorial.setVisible(true);
 				estadiosLayer.setVisible(true);
+				amenitiesLayer.setVisible(true);
 
 			} else if (opção == 'bicicleta') {
 				var d = $('#sl1').val();
@@ -519,6 +525,7 @@ function init() {
 				pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
 				layerVetorial.setVisible(true);
 				estadiosLayer.setVisible(true);
+				amenitiesLayer.setVisible(true);
 			}
 		}
 	})
