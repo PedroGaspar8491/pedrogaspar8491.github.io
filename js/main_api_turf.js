@@ -225,8 +225,6 @@ function init() {
 
 	//chamada inicial à API, no arranque da aplicação
 	var opção = $("input[name='options']:checked").val();
-	opção = 'ape'
-	console.log(opção);
 
 	$('#sl1').slider()
 		.on('slideStop', function (ev) {
@@ -401,6 +399,7 @@ function init() {
 	map.addInteraction(select);
 	hull.set('selectable', false);
 	estadiosLayer.set('selectable', true);
+	amenitiesLayer.set('selectable', true);
 
 	// On selected => show/hide popup
 	select.getFeatures().on(['add'], function (e) {
