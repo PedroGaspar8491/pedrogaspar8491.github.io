@@ -159,7 +159,7 @@ function init() {
 
 	$.ajax({
 		url: 'https://www.gis4cloud.com/grupo5_ptas2024/scripts/amenities_turf.php', async: false, success: function (dados) {
-			sourceEstadios.clear();
+			sourceAmenity.clear();
 			var features = geojsonFormat.readFeatures(dados);
 			amenities_turf = geojsonFormat.writeFeaturesObject(features);
 		}
