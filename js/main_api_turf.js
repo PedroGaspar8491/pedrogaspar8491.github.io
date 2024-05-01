@@ -2,6 +2,7 @@
 var coordInicial;
 var hull_turf;
 var estadios_turf;
+var amenities_turf;
 var estadiosDentroHull;
 varccoordenadas_3857 = [];
 var coordenadas_4326 = [];
@@ -149,11 +150,18 @@ function init() {
 		projection: "ESPG:4326",
 	});
 
+	var amenitiesLayer = new ol.layer.Vector({
+		title: 'Amenities',
+		nome: 'amenities_layer',
+		source: sourceAmenity,
+		style: criarEstilosTipo()
+	});
+
 	$.ajax({
-		url: 'https://www.gis4cloud.com/grupo5_ptas2024/scripts/estadios_turf.php', async: false, success: function (dados) {
+		url: 'https://www.gis4cloud.com/grupo5_ptas2024/scripts/amenities_turf.php', async: false, success: function (dados) {
 			sourceEstadios.clear();
 			var features = geojsonFormat.readFeatures(dados);
-			estadios_turf = geojsonFormat.writeFeaturesObject(features);
+			amenities_turf = geojsonFormat.writeFeaturesObject(features);
 		}
 	});
 
@@ -171,8 +179,14 @@ function init() {
 			estadios_turf = geojsonFormat.writeFeaturesObject(features);
 		}
 	});
-	//calcular com turf.js os estadios que estão dentro da isócrona
-	amenitiesDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+	//calcular com turf.js os pontos de interesse que estão dentro da isócrona
+	amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+		dataProjection: 'EPSG:4326',
+		featureProjection: 'EPSG:3857'
+	}));
+
+
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
@@ -222,6 +236,7 @@ function init() {
 	console.log(opção);
 	coordenadas_4326[0] = -8.657054901123049;
 	coordenadas_4326[1] = 40.631835142937256;
+	pontoInicial.setGeometry(new ol.geom.Point([-963705.332976185, 4958180.85218552]));
 	console.log($('#sl1').val());
 
 	$("input[type='radio']").change(function () {
@@ -263,6 +278,7 @@ function init() {
 				url: routing_url, async: false, success: function (dados) {
 					source_hull.clear();
 					sourceEstadios.clear();
+					sourceAmenity.clear();
 					var features = geojsonFormat.readFeatures(dados);
 					hull_turf = geojsonFormat.writeFeaturesObject(features);
 					source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
@@ -272,7 +288,11 @@ function init() {
 				}
 			});
 
-			estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+			amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+			sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+				dataProjection: 'EPSG:4326',
+				featureProjection: 'EPSG:3857'
+			}));
 			sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 				dataProjection: 'EPSG:4326',
 				featureProjection: 'EPSG:3857'
@@ -291,6 +311,7 @@ function init() {
 				url: routing_url, async: false, success: function (dados) {
 					source_hull.clear();
 					sourceEstadios.clear();
+					sourceAmenity.clear();
 					var features = geojsonFormat.readFeatures(dados);
 					hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -300,7 +321,11 @@ function init() {
 					}));
 				}
 			});
-			estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+			amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+			sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+				dataProjection: 'EPSG:4326',
+				featureProjection: 'EPSG:3857'
+			}));
 			sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 				dataProjection: 'EPSG:4326',
 				featureProjection: 'EPSG:3857'
@@ -325,6 +350,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -334,7 +360,11 @@ function init() {
 						}));
 					}
 				});
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+				amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+				sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				}));
 				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:3857'
@@ -352,6 +382,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -361,7 +392,11 @@ function init() {
 						}));
 					}
 				});
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+				amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+				sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				}));
 				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:3857'
@@ -378,6 +413,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -387,7 +423,11 @@ function init() {
 						}));
 					}
 				});
-				estadiosDentroHull = turf.pointsWithinPolygon(estadios_turf, hull_turf);
+				amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+				sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				}));
 				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:3857'
@@ -399,7 +439,7 @@ function init() {
 			}
 		});
 
-	
+
 	//Controlos
 	//Attribution ("referências")
 	var omeuControloAttribution = new ol.control.Attribution({
