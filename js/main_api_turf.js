@@ -376,6 +376,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -412,6 +413,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -470,6 +472,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -506,6 +509,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -542,6 +546,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_hull.clear();
 						sourceEstadios.clear();
+						sourceAmenity.clear();
 						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -638,6 +643,7 @@ function init() {
 						url: routing_url, async: false, success: function (dados) {
 							source_hull.clear();
 							sourceEstadios.clear();
+							sourceAmenity.clear();
 							var features = geojsonFormat.readFeatures(dados);
 							hull_turf = geojsonFormat.writeFeaturesObject(features);
 
@@ -674,6 +680,7 @@ function init() {
 						url: routing_url, async: false, success: function (dados) {
 							source_hull.clear();
 							sourceEstadios.clear();
+							sourceAmenity.clear();
 							var features = geojsonFormat.readFeatures(dados);
 							hull_turf = geojsonFormat.writeFeaturesObject(features);
 
