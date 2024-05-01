@@ -185,6 +185,7 @@ function init() {
 	}));
 
 	map.addLayer(estadiosLayer);
+	map.addLayer(amenitiesLayer);
 
 	// A feature "ponto de partida".
 	pontoInicial = new ol.Feature();
