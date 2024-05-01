@@ -417,6 +417,8 @@ function init() {
 	estadio_select = document.getElementById("estadio");
 
 	estadio_select.addEventListener("change", function () {
+		opção = $("input[name='options']:checked").val();
+		d = $('#sl1').val();
 		estadio = estadio_select.options[estadio_select.selectedIndex].value;
 		estadio = estadio.split(",");
 		x_dest = parseFloat(estadio[0]);
@@ -530,6 +532,8 @@ function init() {
 	});
 
 	$("input[type='radio']").change(function () {
+		opção = $("input[name='options']:checked").val();
+		d = $('#sl1').val();
 		estadio = estadio_select.options[estadio_select.selectedIndex].value;
 		estadio = estadio.split(",");
 		x_dest = parseFloat(estadio[0]);
