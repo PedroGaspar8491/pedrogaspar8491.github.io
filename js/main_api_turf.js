@@ -179,14 +179,6 @@ function init() {
 			estadios_turf = geojsonFormat.writeFeaturesObject(features);
 		}
 	});
-	//calcular com turf.js os pontos de interesse que estão dentro da isócrona
-	amenitiesDentroHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
-	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesDentroHull, {
-		dataProjection: 'EPSG:4326',
-		featureProjection: 'EPSG:3857'
-	}));
-
-
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
