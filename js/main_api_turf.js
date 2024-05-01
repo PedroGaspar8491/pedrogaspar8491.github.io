@@ -129,7 +129,7 @@ function init() {
 
 		return function (feature, resolution) {
 			switch (feature.get('tipo')) {
-				case 'A':
+				case 'cafe':
 					return styleJI;
 					break;
 				default:
