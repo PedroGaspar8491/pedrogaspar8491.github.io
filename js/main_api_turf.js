@@ -373,8 +373,6 @@ function init() {
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
-						var features = geojsonFormat.readFeatures(dados);
-						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
 						source_routing.addFeatures(geojsonFormat.readFeatures(dados, {
 							dataProjection: 'EPSG:4326',
