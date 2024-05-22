@@ -515,7 +515,7 @@ function init() {
 						}));
 					}
 				});
-				console.log(estadiosDentroHull);
+				
 				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:3857'
