@@ -367,7 +367,7 @@ function init() {
 				});
 
 				var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
-					'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '}],' +
+					'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
 					'{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
 					'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"miles","id":"my_work_route"}';
 				$.ajax({
