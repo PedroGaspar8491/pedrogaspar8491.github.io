@@ -80,14 +80,12 @@ function init() {
 	var routing = new ol.layer.Vector({
 		title: 'route',
 		source: source_routing,
-		style: route_Estilo
+		style: {
+			'fill-color' : 'red',
+		},
 	});
 
-	var route_Estilo = new ol.style.Style({
-		fill: new ol.style.Fill({
-			color:'red'
-		})
-	});
+
 
 	// Geolocation
 	const geolocation = new ol.Geolocation({
