@@ -13,7 +13,7 @@ var x_dest;
 var y_dest;
 var coordinates;
 
-function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing) {
+function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing) {
 	var d = $('#sl1').val();
 	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 		'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
