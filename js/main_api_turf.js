@@ -79,7 +79,14 @@ function init() {
 
 	var routing = new ol.layer.Vector({
 		title: 'route',
-		source: source_routing
+		source: source_routing,
+		style: route_Estilo
+	});
+
+	var route_Estilo = new ol.style.Style({
+		fill: new ol.style.Fill({
+			color:'red'
+		})
 	});
 
 	// Geolocation
@@ -372,17 +379,7 @@ function init() {
 					'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
-						source_routing.clear();
-						for (var key in dados){
-							console.log(key);
-							console.log(dados[key]);
-							for (var innerkey in dados[key]) {
-								console.log(innerkey);
-								console.log(dados[key][innerkey]);
-								
-							}
-						}
-						
+						source_routing.clear();					
 						source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
