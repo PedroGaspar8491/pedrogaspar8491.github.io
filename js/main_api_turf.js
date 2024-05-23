@@ -51,7 +51,7 @@ function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, la
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
 	}));
-	amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+	var amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
 	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
@@ -409,13 +409,13 @@ function init() {
 
 
 			if (opção == 'carro') {
-				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing)
+				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing)
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing);
+				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
 
 			} else if (opção == 'bicicleta') {
-				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing);
+				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
 			}
 		}
 	});
