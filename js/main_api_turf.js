@@ -373,8 +373,8 @@ function init() {
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
-
-						source_routing.addFeatures(geojsonFormat.readFeatures(dados.geometry.coordinates, {
+						console.log(dados.shape);
+						source_routing.addFeatures(geojsonFormat.readFeatures(dados.shape, {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
 						}));
