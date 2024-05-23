@@ -354,9 +354,9 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						console.log(dados.geometry.coordinates);
+						console.log(dados.geometry);
 						sourceAmenity.clear();
-						var features = geojsonFormat.readFeatures(dados.geometry.coordinates);
+						var features = geojsonFormat.readFeatures(dados.geometry);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
 						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
