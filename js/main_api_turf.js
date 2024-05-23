@@ -13,7 +13,7 @@ var x_dest;
 var y_dest;
 var coordinates;
 
-function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull) {
+function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing) {
 	var d = $('#sl1').val();
 	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 		'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
@@ -409,13 +409,13 @@ function init() {
 
 
 			if (opção == 'carro') {
-				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull)
+				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing)
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull);
+				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing);
 
 			} else if (opção == 'bicicleta') {
-				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull);
+				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, amenitiesWithinHull, routing);
 			}
 		}
 	});
