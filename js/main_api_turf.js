@@ -78,6 +78,7 @@ function init() {
 	})
 
 	var routing = new ol.layer.Vector({
+		background : 'red',
 		title: 'route',
 		source: source_routing,
 		style: {
