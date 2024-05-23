@@ -377,7 +377,7 @@ function init() {
 							console.log(dados[0][key]);
 						}
 						
-						source_routing.addFeatures(geojsonFormat.readFeatures(dados[0], {
+						source_routing.addFeatures(geojsonFormat.readFeatures(dados, {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
 						}));
