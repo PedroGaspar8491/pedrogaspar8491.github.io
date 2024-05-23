@@ -381,7 +381,7 @@ function init() {
 							}
 						}
 						
-						source_routing.addFeatures(geojsonFormat.readFeatures(dados, {
+						source_routing.addFeatures(geojsonFormat.readFeatures(dados[0][0]['geometry'], {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
 						}));
