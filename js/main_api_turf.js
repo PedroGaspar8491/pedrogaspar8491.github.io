@@ -12,6 +12,16 @@ var estadio_select;
 var x_dest;
 var y_dest;
 var coordinates;
+var map;
+var estadiosLayer;
+var amenitiesLayer;
+var layerVetorial;
+var source_routing;
+var source_hull;
+var sourceAmenity;
+var source_routing;
+var sourceEstadios;
+var amenitiesWithinHull;
 
 function update_map(veiculo) {
 	var d = $('#sl1').val();
