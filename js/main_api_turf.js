@@ -86,6 +86,7 @@ function init() {
 			}),
 			stroke: new ol.style.Stroke({
 				color:'red',
+				width:'5'
 			}),
 		}),
 	});
