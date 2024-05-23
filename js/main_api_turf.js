@@ -374,8 +374,10 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
 						for (var key in dados){
+							console.log(key);
 							console.log(dados[key]);
 							for (var innerkey in dados[key]) {
+								console.log(innerkey);
 								console.log(dados[key][innerkey]);;
 								
 							}
