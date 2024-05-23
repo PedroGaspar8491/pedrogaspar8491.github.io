@@ -373,7 +373,7 @@ function init() {
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
-						for (var key in dados){
+						for (var key in dados[0]){
 							console.log(dados[key]);
 						}
 						
