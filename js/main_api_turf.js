@@ -81,11 +81,11 @@ function init() {
 		background: 'red',
 		title: 'route',
 		source: source_routing,
-		style: new Style({
-			fill: new Fill({
+		style: new ol.style.Style({
+			fill: new ol.style.Fill({
 				color: 'red',
 			}),
-			stroke: new Stroke({
+			stroke: new ol.style.Stroke({
 				color:'red',
 			}),
 		}),
