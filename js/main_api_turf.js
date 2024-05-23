@@ -375,6 +375,10 @@ function init() {
 						source_routing.clear();
 						for (var key in dados){
 							console.log(dados[key]);
+							for (var innerkey in dados[key]) {
+								console.log(dados[key][innerkey]);;
+								
+							}
 						}
 						
 						source_routing.addFeatures(geojsonFormat.readFeatures(dados, {
