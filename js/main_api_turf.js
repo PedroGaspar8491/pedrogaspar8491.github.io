@@ -354,9 +354,9 @@ function init() {
 				$.ajax({
 					url: hull_url, async: false, success: function (dados) {
 						source_hull.clear();
-						console.log(dados.geometry);
+
 						sourceAmenity.clear();
-						var features = geojsonFormat.readFeatures(dados.geometry);
+						var features = geojsonFormat.readFeatures(dados);
 						hull_turf = geojsonFormat.writeFeaturesObject(features);
 
 						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
@@ -366,12 +366,15 @@ function init() {
 					}
 				});
 
-				var routing_url = "";
+				var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
+					'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
+					'{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+					'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
 
-						source_routing.addFeatures(geojsonFormat.readFeatures(dados, {
+						source_routing.addFeatures(geojsonFormat.readFeatures(dados.geometry.coordinates, {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
 						}));
