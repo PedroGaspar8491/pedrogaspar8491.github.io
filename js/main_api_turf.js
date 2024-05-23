@@ -78,12 +78,17 @@ function init() {
 	})
 
 	var routing = new ol.layer.Vector({
-		background : 'red',
+		background: 'red',
 		title: 'route',
 		source: source_routing,
-		style: {
-			'fill-color' : 'red',
-		},
+		style: new Style({
+			fill: new Fill({
+				color: 'red',
+			}),
+			stroke: new Stroke({
+				color:'red',
+			}),
+		}),
 	});
 
 
@@ -378,7 +383,7 @@ function init() {
 					'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
 				$.ajax({
 					url: routing_url, async: false, success: function (dados) {
-						source_routing.clear();					
+						source_routing.clear();
 						source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
@@ -518,7 +523,7 @@ function init() {
 						}));
 					}
 				});
-				
+
 				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:3857'
