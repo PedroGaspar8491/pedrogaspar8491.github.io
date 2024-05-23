@@ -374,7 +374,7 @@ function init() {
 					url: routing_url, async: false, success: function (dados) {
 						source_routing.clear();
 						for (var key in dados[0]){
-							console.log(dados[key]);
+							console.log(dados[0][key]);
 						}
 						
 						source_routing.addFeatures(geojsonFormat.readFeatures(dados[0], {
