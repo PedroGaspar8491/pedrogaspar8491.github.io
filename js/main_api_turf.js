@@ -13,7 +13,7 @@ var x_dest;
 var y_dest;
 var coordinates;
 
-function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates) {
+function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull) {
 	var d = $('#sl1').val();
 	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
 		'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
@@ -409,10 +409,10 @@ function init() {
 
 
 			if (opção == 'carro') {
-				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates)
+				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull)
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map("auto");
+				update_map(coordenadas_4326, "ape", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull);
 
 			} else if (opção == 'bicicleta') {
 				var d = $('#sl1').val();
