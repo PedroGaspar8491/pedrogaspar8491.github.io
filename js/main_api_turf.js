@@ -13,6 +13,58 @@ var x_dest;
 var y_dest;
 var coordinates;
 
+function update_map(veiculo) {
+	var d = $('#sl1').val();
+	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
+		'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+		'"costing":' + veiculo + ',"polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
+
+	$.ajax({
+		url: hull_url, async: false, success: function (dados) {
+			source_hull.clear();
+
+			sourceAmenity.clear();
+			var features = geojsonFormat.readFeatures(dados);
+			hull_turf = geojsonFormat.writeFeaturesObject(features);
+
+			source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
+				dataProjection: 'EPSG:4326',
+				featureProjection: 'EPSG:3857'
+			}));
+		}
+	});
+
+	var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
+		'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
+		'{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+		'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
+	$.ajax({
+		url: routing_url, async: false, success: function (dados) {
+			source_routing.clear();
+			source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+				dataProjection: 'EPSG:4326',
+				featureProjection: 'EPSG:3857'
+			}));
+		}
+	});
+	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
+		dataProjection: 'EPSG:4326',
+		featureProjection: 'EPSG:3857'
+	}));
+	amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
+		dataProjection: 'EPSG:4326',
+		featureProjection: 'EPSG:3857'
+	}));
+	var extent = hull.getSource().getExtent();
+	map.getView().fit(extent);
+	hull.setVisible(true);
+	routing.setVisible(true);
+	estadiosLayer.setVisible(true);
+	layerVetorial.setVisible(true);
+	amenitiesLayer.setVisible(true);
+}
+
 function init() {
 
 	// Popup overlay com popupClass=anim
@@ -85,8 +137,8 @@ function init() {
 				color: 'red',
 			}),
 			stroke: new ol.style.Stroke({
-				color:'red',
-				width:'5'
+				color: 'red',
+				width: '5'
 			}),
 		}),
 	});
@@ -408,41 +460,7 @@ function init() {
 				amenitiesLayer.setVisible(true);
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				var d = $('#sl1').val();
-				var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-					'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
-					'"costing":"pedestrian","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
-
-				$.ajax({
-					url: hull_url, async: false, success: function (dados) {
-						source_hull.clear();
-
-						sourceAmenity.clear();
-						var features = geojsonFormat.readFeatures(dados);
-						hull_turf = geojsonFormat.writeFeaturesObject(features);
-
-						source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-							dataProjection: 'EPSG:4326',
-							featureProjection: 'EPSG:3857'
-						}));
-					}
-				});
-				sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
-					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
-				}));
-				amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
-				sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
-					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
-				}));
-				var extent = hull.getSource().getExtent();
-				map.getView().fit(extent);
-				hull.setVisible(true);
-				pontoInicial.setGeometry(new ol.geom.Point([coordenadas_3857[0], coordenadas_3857[1]]));
-				layerVetorial.setVisible(true);
-				estadiosLayer.setVisible(true);
-				amenitiesLayer.setVisible(true);
+				update_map("auto");
 
 			} else if (opção == 'bicicleta') {
 				var d = $('#sl1').val();
