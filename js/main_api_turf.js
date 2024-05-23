@@ -378,12 +378,12 @@ function init() {
 							console.log(dados[key]);
 							for (var innerkey in dados[key]) {
 								console.log(innerkey);
-								console.log(dados[key][innerkey]);;
+								console.log(dados[key][innerkey]);
 								
 							}
 						}
 						
-						source_routing.addFeatures(geojsonFormat.readFeatures(dados[0][0]['geometry'], {
+						source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
 							dataProjection: 'EPSG:4326',
 							featureProjection: 'EPSG:3857'
 						}));
