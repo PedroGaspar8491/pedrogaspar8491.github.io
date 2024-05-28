@@ -206,6 +206,9 @@ function init() {
 				case 'cafe':
 					return styleJI;
 					break;
+				case 'restaurante':
+					return styleJI;
+					break;
 				default:
 					return defeito;
 					break;

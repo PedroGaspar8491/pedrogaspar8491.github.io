@@ -134,3 +134,9 @@ p {
     bottom:-500px;
     right:10px;
 }
+
+.estadioSelect{
+    color: black;
+    border-radius: 5px;
+    max-width: fit-content;
+}
