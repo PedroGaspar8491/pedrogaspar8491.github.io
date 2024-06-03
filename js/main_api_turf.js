@@ -1,22 +1,21 @@
 //Variáveis globais
-var coordInicial;
 var hull_turf;
+var buffer_turf;
 var estadios_turf;
 var amenities_turf;
 var routing_turf;
 var estadiosDentroHull;
-varccoordenadas_3857 = [];
-var coordenadas_4326 = [];
+var ccoordenadas_3857 = [];
+var coordsDestino = [];
 var geojsonFormat = new ol.format.GeoJSON();
 var estadio_select;
 var x_dest;
 var y_dest;
-var coordinates;
 
-function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing) {
+function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer) {
 	var d = $('#sl1').val();
 	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+		'{"locations":[{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
 		'"costing":"' + veiculo + '","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
 
 	$.ajax({
@@ -36,17 +35,46 @@ function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, la
 
 	var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
 		'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
-		'{"lat":' + coordenadas_4326[1] + ',"lon":' + coordenadas_4326[0] + '}],' +
+		'{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
 		'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
 	$.ajax({
 		url: routing_url, async: false, success: function (dados) {
 			source_routing.clear();
+			source_buffer.clear();
+			var parser = new jsts.io.OL3Parser();
+			parser.inject(
+				ol.geom.Point,
+				ol.geom.LineString,
+				ol.geom.LinearRing,
+				ol.geom.Polygon,
+				ol.geom.MultiPoint,
+				ol.geom.MultiLineString,
+				ol.geom.MultiPolygon,
+			);
+			var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+				dataProjection: 'EPSG:4326',
+				featureProjection: 'EPSG:3857'
+			});
 			source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
 				dataProjection: 'EPSG:4326',
 				featureProjection: 'EPSG:3857'
 			}));
+
+			for (var i = 0; i < features.length; i++) {
+
+				var feature = features[i];
+				var jstsGeom = parser.read(feature.getGeometry());
+				var buffered = jstsGeom.buffer(200);
+				feature.setGeometry(parser.write(buffered));
+
+			}
+			buffer_turf = geojsonFormat.writeFeaturesObject(features);
+			console.log(buffer_turf);
+			source_buffer.addFeatures(features);
 		}
 	});
+
+
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
@@ -56,10 +84,19 @@ function update_map(coordenadas_4326, veiculo, estadiosLayer, amenitiesLayer, la
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
 	}));
+	var amenitiesWithinBuffer = turf.pointsWithinPolygon(amenities_turf, buffer_turf);
+	console.log(hull_turf);
+	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinBuffer, {
+		dataProjection: 'EPSG:4326',
+		featureProjection: 'EPSG:3857'
+	}));
+
+
 	var extent = hull.getSource().getExtent();
 	map.getView().fit(extent);
 	hull.setVisible(true);
 	routing.setVisible(true);
+	buffer.setVisible(true);
 	estadiosLayer.setVisible(true);
 	layerVetorial.setVisible(true);
 	amenitiesLayer.setVisible(true);
@@ -133,16 +170,26 @@ function init() {
 		title: 'route',
 		source: source_routing,
 		style: new ol.style.Style({
-			fill: new ol.style.Fill({
-				color: 'red',
-			}),
 			stroke: new ol.style.Stroke({
-				color: 'red',
-				width: '5'
+				color: 'blue',
+				width: '2'
 			}),
 		}),
 	});
 
+	var source_buffer = new ol.source.Vector({
+	})
+
+	var buffer = new ol.layer.Vector({
+		title: 'buffer',
+		source: source_buffer,
+		style: new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: 'blue',
+				width: '2'
+			}),
+		}),
+	});
 
 
 	// Geolocation
@@ -264,9 +311,9 @@ function init() {
 	});
 
 	map.addLayer(amenitiesLayer);
-
 	// A feature "ponto de partida".
-	pontoInicial = new ol.Feature();
+	pontoInicial = new ol.Feature(
+	);
 
 	//Estilo a aplicar ao ponto de partida
 	var estiloPartida = [
@@ -300,10 +347,8 @@ function init() {
 	});
 
 	map.addLayer(layerVetorial);
+
 	var opção = $("input[name='options']:checked").val();
-
-
-
 
 	//Controlos
 	//Attribution ("referências")
@@ -325,31 +370,6 @@ function init() {
 	var omeuControloZoom = new ol.control.Zoom();
 	map.addControl(omeuControloZoom);
 
-
-	// Isto é apenas uma curiosidade, um addon -> pode fazer drap an drop de ficheiros GeoJoson, KML ou GPX diretamente no mapa
-	var dragAndDrop = new ol.interaction.DragAndDrop({
-		formatConstructors: [
-			ol.format.GPX,
-			ol.format.GeoJSON,
-			ol.format.KML,
-			ol.format.TopoJSON
-		]
-	});
-
-	dragAndDrop.on('addfeatures', function (event) {
-		var vectorSource = new ol.source.Vector({
-			features: event.features,
-			projection: event.projection
-		});
-		map.getLayers().push(new ol.layer.Vector({
-			source: vectorSource
-			//		style: vectorStyle
-		}));
-		view.fit(vectorSource.getExtent(), map.getSize());
-
-	});
-
-	map.addInteraction(dragAndDrop);
 
 	function switchLayer() {
 		var checkedLayer = $('#layerswitcher input[name=layer]:checked').val();
@@ -388,6 +408,7 @@ function init() {
 
 	map.addLayer(hull);
 	map.addLayer(routing);
+	map.addLayer(buffer)
 
 	estadio_select = document.getElementById("estadio");
 
@@ -404,26 +425,25 @@ function init() {
 		routing.setVisible(false);
 		estadiosLayer.setVisible(false);
 		amenitiesLayer.setVisible(false);
+		layerVetorial.setVisible(false);
 
 		if (pontoInicial.getGeometry() == null) {
-			coordenadas_4326 = [x_dest, y_dest];
-			console.log(coordenadas_4326);
-			coordenadas_3857 = [x_dest, y_dest];
-
+			coordsDestino = [x_dest, y_dest];
+			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
 
 			if (opção == 'carro') {
-				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing)
+				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
+				update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 
 			} else if (opção == 'bicicleta') {
-				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
+				update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 			}
 		}
 	});
 
-	$("input[type='radio']").change(function () {
+	$("input[type='radio']").on('change', function () {
 		opção = $("input[name='options']:checked").val();
 		d = $('#sl1').val();
 		estadio = estadio_select.options[estadio_select.selectedIndex].value;
@@ -437,19 +457,19 @@ function init() {
 		amenitiesLayer.setVisible(false);
 
 		if (pontoInicial.getGeometry() == null) {
-			coordenadas_4326 = [x_dest, y_dest];
-			console.log(coordenadas_4326);
-			coordenadas_3857 = [x_dest, y_dest];
+			coordsDestino = [x_dest, y_dest];
+			layerVetorial.clear()
+			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
 
 
 			if (opção == 'carro') {
-				update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing)
+				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
 
 			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
+				update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 
 			} else if (opção == 'bicicleta') {
-				update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
+				update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 			}
 		}
 	});
@@ -469,19 +489,18 @@ function init() {
 			amenitiesLayer.setVisible(false);
 
 			if (pontoInicial.getGeometry() == null) {
-				coordenadas_4326 = [x_dest, y_dest];
-				console.log(coordenadas_4326);
-				coordenadas_3857 = [x_dest, y_dest];
+				coordsDestino = [x_dest, y_dest];
+				pontoInicial.set('geometry', new ol.geom.Point(coordinates));
 
 
 				if (opção == 'carro') {
-					update_map(coordenadas_4326, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing)
-	
+					update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
+
 				} else if ($("input[name='options']:checked").val() == 'ape') {
-					update_map(coordenadas_4326, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
-	
+					update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+
 				} else if (opção == 'bicicleta') {
-					update_map(coordenadas_4326, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing);
+					update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 				}
 			}
 		});
