@@ -69,7 +69,6 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 
 			}
 			buffer_turf = geojsonFormat.writeFeaturesObject(features);
-			console.log(buffer_turf);
 			source_buffer.addFeatures(features);
 		}
 	});
@@ -85,12 +84,11 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 		featureProjection: 'EPSG:3857'
 	}));
 	var amenitiesWithinBuffer = turf.pointsWithinPolygon(amenities_turf, buffer_turf);
-	console.log(hull_turf);
 	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinBuffer, {
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
 	}));
-
+	console.log(amenities_turf);
 
 	var extent = hull.getSource().getExtent();
 	map.getView().fit(extent);
@@ -428,7 +426,7 @@ function init() {
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 			if (opção == 'carro') {
 				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
@@ -457,8 +455,7 @@ function init() {
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			layerVetorial.clear()
-			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 
 			if (opção == 'carro') {
@@ -489,7 +486,7 @@ function init() {
 
 			if (pontoInicial.getGeometry() == null) {
 				coordsDestino = [x_dest, y_dest];
-				pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+				pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 
 				if (opção == 'carro') {
