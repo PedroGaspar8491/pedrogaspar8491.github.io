@@ -215,17 +215,16 @@ function init() {
 
 	// Função de estilo para os estadios
 	var criarEstilosTipo = (function () {
-		var defeito = [new ol.style.Style({
-			image: new ol.style.Circle({
-				radius: 8,
-				fill: new ol.style.Fill({
-					color: 'green'
-				}),
-				stroke: new ol.style.Stroke({
-					color: 'green'
+		var defeito = [
+			new ol.style.Style({
+				image: new ol.style.Icon({
+					anchor: [0.5, 300],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					src: './img/stadium.png',
+					scale: 0.15
 				})
 			})
-		})
 		];
 		var styleJI = [new ol.style.Style({
 			image: new ol.style.Circle({
@@ -240,7 +239,7 @@ function init() {
 		}),
 		new ol.style.Style({
 			image: new ol.style.Icon(({
-				scale: 0.4,
+				scale: 0.5,
 				anchor: [0.5, 0.5],
 				anchorXUnits: 'fraction',
 				anchorYUnits: 'fraction',
