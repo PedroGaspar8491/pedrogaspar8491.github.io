@@ -13,93 +13,103 @@ var x_dest;
 var y_dest;
 
 function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer) {
-	var d = $('#sl1').val();
-	var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
-		'{"locations":[{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
-		'"costing":"' + veiculo + '","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
+	if (!isNaN(coordsDestino[0])) {
+		hull.setVisible(false);
+		routing.setVisible(false);
+		estadiosLayer.setVisible(false);
+		amenitiesLayer.setVisible(false);
+		layerVetorial.setVisible(false);
 
-	$.ajax({
-		url: hull_url, async: false, success: function (dados) {
-			source_hull.clear();
+		var d = $('#sl1').val();
+		var hull_url = 'https://routing.gis4cloud.pt/isochrone?json=' +
+			'{"locations":[{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
+			'"costing":"' + veiculo + '","polygons":true,"contours":[{"time":' + d + ',"color":"ff0000"}]}&id=hull inicial';
 
-			sourceAmenity.clear();
-			var features = geojsonFormat.readFeatures(dados);
-			hull_turf = geojsonFormat.writeFeaturesObject(features);
+		$.ajax({
+			url: hull_url, async: false, success: function (dados) {
+				source_hull.clear();
 
-			source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
-				dataProjection: 'EPSG:4326',
-				featureProjection: 'EPSG:3857'
-			}));
-		}
-	});
+				sourceAmenity.clear();
+				var features = geojsonFormat.readFeatures(dados);
+				hull_turf = geojsonFormat.writeFeaturesObject(features);
 
-	var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
-		'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
-		'{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
-		'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
-	$.ajax({
-		url: routing_url, async: false, success: function (dados) {
-			source_routing.clear();
-			source_buffer.clear();
-			var parser = new jsts.io.OL3Parser();
-			parser.inject(
-				ol.geom.Point,
-				ol.geom.LineString,
-				ol.geom.LinearRing,
-				ol.geom.Polygon,
-				ol.geom.MultiPoint,
-				ol.geom.MultiLineString,
-				ol.geom.MultiPolygon,
-			);
-			var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
-				dataProjection: 'EPSG:4326',
-				featureProjection: 'EPSG:3857'
-			});
-			source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
-				dataProjection: 'EPSG:4326',
-				featureProjection: 'EPSG:3857'
-			}));
-
-			for (var i = 0; i < features.length; i++) {
-
-				var feature = features[i];
-				var jstsGeom = parser.read(feature.getGeometry());
-				var buffered = jstsGeom.buffer(200);
-				feature.setGeometry(parser.write(buffered));
-
+				source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				}));
 			}
-			buffer_turf = geojsonFormat.writeFeaturesObject(features);
-			console.log(buffer_turf);
-			source_buffer.addFeatures(features);
-		}
-	});
+		});
+
+		var routing_url = 'https://routing.gis4cloud.pt/route?json=' +
+			'{"locations":[{"lat":' + coordinates[1] + ',"lon":' + coordinates[0] + '},' +
+			'{"lat":' + coordsDestino[1] + ',"lon":' + coordsDestino[0] + '}],' +
+			'"costing":"auto","costing_options":{"auto":{"country_crossing_penalty":2000.0}},"units":"km","format":"osrm", "shape_format":"geojson"}';
+		$.ajax({
+			url: routing_url, async: false, success: function (dados) {
+				source_routing.clear();
+				source_buffer.clear();
+				var parser = new jsts.io.OL3Parser();
+				parser.inject(
+					ol.geom.Point,
+					ol.geom.LineString,
+					ol.geom.LinearRing,
+					ol.geom.Polygon,
+					ol.geom.MultiPoint,
+					ol.geom.MultiLineString,
+					ol.geom.MultiPolygon,
+				);
+				var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				});
+				source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+					dataProjection: 'EPSG:4326',
+					featureProjection: 'EPSG:3857'
+				}));
+
+				for (var i = 0; i < features.length; i++) {
+
+					var feature = features[i];
+					var jstsGeom = parser.read(feature.getGeometry());
+					var buffered = jstsGeom.buffer(200);
+					feature.setGeometry(parser.write(buffered));
+
+				}
+				buffer_turf = geojsonFormat.writeFeaturesObject(features);
+				source_buffer.addFeatures(features);
+			}
+		})
+			;
 
 
-	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
-		dataProjection: 'EPSG:4326',
-		featureProjection: 'EPSG:3857'
-	}));
-	var amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
-	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
-		dataProjection: 'EPSG:4326',
-		featureProjection: 'EPSG:3857'
-	}));
-	var amenitiesWithinBuffer = turf.pointsWithinPolygon(amenities_turf, buffer_turf);
-	console.log(hull_turf);
-	sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinBuffer, {
-		dataProjection: 'EPSG:4326',
-		featureProjection: 'EPSG:3857'
-	}));
+		sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
+			dataProjection: 'EPSG:4326',
+			featureProjection: 'EPSG:3857'
+		}));
+		var amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
+		sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
+			dataProjection: 'EPSG:4326',
+			featureProjection: 'EPSG:3857'
+		}));
+		var amenitiesWithinBuffer = turf.pointsWithinPolygon(amenities_turf, buffer_turf);
+		sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinBuffer, {
+			dataProjection: 'EPSG:4326',
+			featureProjection: 'EPSG:3857'
+		}));
 
+		console.log(amenities_turf);
+		console.log(hull_turf);
+		console.log(amenitiesWithinHull);
 
-	var extent = hull.getSource().getExtent();
-	map.getView().fit(extent);
-	hull.setVisible(true);
-	routing.setVisible(true);
-	buffer.setVisible(true);
-	estadiosLayer.setVisible(true);
-	layerVetorial.setVisible(true);
-	amenitiesLayer.setVisible(true);
+		var extent = hull.getSource().getExtent();
+		map.getView().fit(extent);
+		hull.setVisible(true);
+		routing.setVisible(true);
+		buffer.setVisible(true);
+		estadiosLayer.setVisible(true);
+		layerVetorial.setVisible(true);
+		amenitiesLayer.setVisible(true);
+	}
 }
 
 function init() {
@@ -306,6 +316,7 @@ function init() {
 			sourceAmenity.clear();
 			var features = geojsonFormat.readFeatures(dados);
 			amenities_turf = geojsonFormat.writeFeaturesObject(features);
+			sourceAmenity.addFeatures(features);
 		}
 	});
 
@@ -420,15 +431,10 @@ function init() {
 		y_dest = parseFloat(estadio[1]);
 
 		pontoInicial.setGeometry(null);
-		hull.setVisible(false);
-		routing.setVisible(false);
-		estadiosLayer.setVisible(false);
-		amenitiesLayer.setVisible(false);
-		layerVetorial.setVisible(false);
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 			if (opção == 'carro') {
 				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
@@ -452,13 +458,11 @@ function init() {
 
 		pontoInicial.setGeometry(null);
 		hull.setVisible(false);
-		estadiosLayer.setVisible(false);
-		amenitiesLayer.setVisible(false);
+
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			layerVetorial.clear()
-			pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 
 			if (opção == 'carro') {
@@ -483,13 +487,10 @@ function init() {
 			y_dest = parseFloat(estadio[1]);
 
 			pontoInicial.setGeometry(null);
-			hull.setVisible(false);
-			estadiosLayer.setVisible(false);
-			amenitiesLayer.setVisible(false);
 
 			if (pontoInicial.getGeometry() == null) {
 				coordsDestino = [x_dest, y_dest];
-				pontoInicial.set('geometry', new ol.geom.Point(coordinates));
+				pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
 
 
 				if (opção == 'carro') {
