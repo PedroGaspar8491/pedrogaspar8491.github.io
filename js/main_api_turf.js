@@ -35,7 +35,7 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 
 				source_hull.addFeatures(geojsonFormat.readFeatures(dados, {
 					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
+					featureProjection: 'EPSG:4326'
 				}));
 			}
 		});
@@ -58,48 +58,34 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 					ol.geom.MultiLineString,
 					ol.geom.MultiPolygon,
 				);
-				var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+				var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry']);
+				source_routing.addFeatures(features, {
 					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
+					featureProjection: 'EPSG:4326'
 				});
-				source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
+				var buffered = turf.buffer(dados['routes'][0]['geometry'], [0.1], { units: 'kilometers' });
+				source_buffer.addFeatures(geojsonFormat.readFeatures(buffered, {
 					dataProjection: 'EPSG:4326',
-					featureProjection: 'EPSG:3857'
+					featureProjection: 'EPSG:4326'
 				}));
-
-				for (var i = 0; i < features.length; i++) {
-
-					var feature = features[i];
-					var jstsGeom = parser.read(feature.getGeometry());
-					var buffered = jstsGeom.buffer(200);
-					feature.setGeometry(parser.write(buffered));
-
-				}
-				buffer_turf = geojsonFormat.writeFeaturesObject(features);
-				source_buffer.addFeatures(features);
+				buffer_turf = geojsonFormat.writeFeaturesObject(geojsonFormat.readFeatures(buffered));
 			}
-		})
-			;
-
+		});
 
 		sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 			dataProjection: 'EPSG:4326',
-			featureProjection: 'EPSG:3857'
+			featureProjection: 'EPSG:4326'
 		}));
 		var amenitiesWithinHull = turf.pointsWithinPolygon(amenities_turf, hull_turf);
 		sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinHull, {
 			dataProjection: 'EPSG:4326',
-			featureProjection: 'EPSG:3857'
+			featureProjection: 'EPSG:4326'
 		}));
 		var amenitiesWithinBuffer = turf.pointsWithinPolygon(amenities_turf, buffer_turf);
 		sourceAmenity.addFeatures(geojsonFormat.readFeatures(amenitiesWithinBuffer, {
 			dataProjection: 'EPSG:4326',
-			featureProjection: 'EPSG:3857'
+			featureProjection: 'EPSG:4326'
 		}));
-
-		console.log(amenities_turf);
-		console.log(hull_turf);
-		console.log(amenitiesWithinHull);
 
 		var extent = hull.getSource().getExtent();
 		map.getView().fit(extent);
@@ -146,8 +132,8 @@ function init() {
 
 	//Definição da "view" do mapa
 	var view = new ol.View({
-		projection: 'EPSG:3857',
-		center: ol.proj.transform([-8.651697, 40.641121], 'EPSG:4326', 'EPSG:3857'),
+		projection: 'EPSG:4326',
+		center: [-8.651697, 40.641121],
 		//extent: [-982195.7341678787, 4910200.594997236, -909505.2644025753, 5016168.94481226],
 		zoom: 12,
 		minZoom: 4,
@@ -220,7 +206,6 @@ function init() {
 
 	geolocation.on('change:position', function () {
 		coordinates = geolocation.getPosition();
-		coordinates = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326');
 	});
 
 	// Função de estilo para os estadios
@@ -294,7 +279,7 @@ function init() {
 	});
 	sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 		dataProjection: 'EPSG:4326',
-		featureProjection: 'EPSG:3857'
+		featureProjection: 'EPSG:4326'
 	}));
 
 	map.addLayer(estadiosLayer);
@@ -316,7 +301,6 @@ function init() {
 			sourceAmenity.clear();
 			var features = geojsonFormat.readFeatures(dados);
 			amenities_turf = geojsonFormat.writeFeaturesObject(features);
-			sourceAmenity.addFeatures(features);
 		}
 	});
 
