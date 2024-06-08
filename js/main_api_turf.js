@@ -208,9 +208,8 @@ function init() {
 		coordinates = geolocation.getPosition();
 	});
 
-	// Função de estilo para os estadios
 	var criarEstilosTipo = (function () {
-		var defeito = [
+		var estadioStyle = [
 			new ol.style.Style({
 				image: new ol.style.Icon({
 					anchor: [0.5, 300],
@@ -221,41 +220,48 @@ function init() {
 				})
 			})
 		];
-		var styleJI = [new ol.style.Style({
-			image: new ol.style.Circle({
-				radius: 8,
-				fill: new ol.style.Fill({
-					color: 'black'
-				}),
-				stroke: new ol.style.Stroke({
-					color: 'black'
+		var cafeStyle = [
+			new ol.style.Style({
+				image: new ol.style.Icon({
+					anchor: [0.5, 300],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					src: './img/cafe.png',
+					scale: 0.15
 				})
 			})
-		}),
-		new ol.style.Style({
-			image: new ol.style.Icon(({
-				scale: 0.5,
-				anchor: [0.5, 0.5],
-				anchorXUnits: 'fraction',
-				anchorYUnits: 'fraction',
-				src: './img/ji.png'
-			}))
-		})];
+		];
+		var restauranteStyle = [
+			new ol.style.Style({
+				image: new ol.style.Icon({
+					anchor: [0.5, 300],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					src: './img/restaurant.png',
+					scale: 0.15
+				})
+			})
+		];
 
 		return function (feature, resolution) {
-			switch (feature.get('tipo')) {
-				case 'cafe':
-					return styleJI;
-					break;
-				case 'restaurante':
-					return styleJI;
-					break;
-				default:
-					return defeito;
-					break;
+			if (feature != undefined) {
+				switch (feature.get('tipo')) {
+					case 'cafe':
+						return cafeStyle;
+						break;
+					case 'restaurante':
+						return restauranteStyle;
+						break;
+					default:
+						return estadioStyle;
+						break;
+				}
+			} else {
+				return estadioStyle;
 			}
+
 		};
-	})
+	})();
 
 	//definição do layer dos estadios
 	var sourceEstadios = new ol.source.Vector({
