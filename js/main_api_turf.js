@@ -127,7 +127,7 @@ function init() {
 		projection: 'EPSG:4326',
 		center: [-8.651697, 40.641121],
 		zoom: 12,
-		minZoom: 10,
+		minZoom: 9,
 		maxZoom: 20
 	})
 	//Definição do mapa
@@ -380,13 +380,40 @@ function init() {
 	estadiosLayer.set('selectable', true);
 	amenitiesLayer.set('selectable', true);
 
+	map.on('click', function (evt) {
+		const coordinate = evt.coordinate;
+		opção = $("input[name='options']:checked").val();
+		d = $('#sl1').val();
+		estadio = estadio_select.options[estadio_select.selectedIndex].value;
+		estadio = estadio.split(",");
+		x_dest = parseFloat(estadio[0]);
+		y_dest = parseFloat(estadio[1]);
+
+		pontoInicial.setGeometry(null);
+		hull.setVisible(false);
+
+
+		if (pontoInicial.getGeometry() == null) {
+			coordsDestino = [x_dest, y_dest];
+			pontoInicial.set('geometry', new ol.geom.Point([coordinate[0], coordinate[1]]));
+
+
+			if (opção == 'carro') {
+				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer)
+
+			} else if ($("input[name='options']:checked").val() == 'ape') {
+				update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer);
+
+			} else if (opção == 'bicicleta') {
+				update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer);
+			}
+		}
+	});
+
 	// On selected => show/hide popup
 	select.getFeatures().on(['add'], function (e) {
 		var feature = e.element;
 		var content = "";
-		if (typeof feature.get("tipo") !== 'undefined') {
-			content += feature.get("tipo ");
-		}
 		content += feature.get("nome");
 		popup.show(feature.getGeometry().getCoordinates(), content);
 	})
@@ -412,7 +439,7 @@ function init() {
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
 
 			if (opção == 'carro') {
 				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
@@ -440,7 +467,7 @@ function init() {
 
 		if (pontoInicial.getGeometry() == null) {
 			coordsDestino = [x_dest, y_dest];
-			pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
+			pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
 
 
 			if (opção == 'carro') {
@@ -468,7 +495,7 @@ function init() {
 
 			if (pontoInicial.getGeometry() == null) {
 				coordsDestino = [x_dest, y_dest];
-				pontoInicial.set('geometry', new ol.geom.Point([coordinates[1], coordinates[0]]));
+				pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
 
 
 				if (opção == 'carro') {
