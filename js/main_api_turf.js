@@ -5,7 +5,7 @@ var estadios_turf;
 var amenities_turf;
 var routing_turf;
 var estadiosDentroHull;
-var ccoordenadas_3857 = [];
+var ccoordenadas_4326 = [];
 var coordsDestino = [];
 var geojsonFormat = new ol.format.GeoJSON();
 var estadio_select;
@@ -48,21 +48,11 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 			url: routing_url, async: false, success: function (dados) {
 				source_routing.clear();
 				source_buffer.clear();
-				var parser = new jsts.io.OL3Parser();
-				parser.inject(
-					ol.geom.Point,
-					ol.geom.LineString,
-					ol.geom.LinearRing,
-					ol.geom.Polygon,
-					ol.geom.MultiPoint,
-					ol.geom.MultiLineString,
-					ol.geom.MultiPolygon,
-				);
-				var features = geojsonFormat.readFeatures(dados['routes'][0]['geometry']);
-				source_routing.addFeatures(features, {
+				source_routing.addFeatures(geojsonFormat.readFeatures(dados['routes'][0]['geometry'], {
 					dataProjection: 'EPSG:4326',
 					featureProjection: 'EPSG:4326'
-				});
+				}));
+
 				var buffered = turf.buffer(dados['routes'][0]['geometry'], [0.1], { units: 'kilometers' });
 				source_buffer.addFeatures(geojsonFormat.readFeatures(buffered, {
 					dataProjection: 'EPSG:4326',
@@ -70,7 +60,9 @@ function update_map(coordsDestino, veiculo, estadiosLayer, amenitiesLayer, layer
 				}));
 				buffer_turf = geojsonFormat.writeFeaturesObject(geojsonFormat.readFeatures(buffered));
 			}
-		});
+		})
+			;
+
 
 		sourceEstadios.addFeatures(geojsonFormat.readFeatures(estadios_turf, {
 			dataProjection: 'EPSG:4326',
@@ -134,12 +126,10 @@ function init() {
 	var view = new ol.View({
 		projection: 'EPSG:4326',
 		center: [-8.651697, 40.641121],
-		//extent: [-982195.7341678787, 4910200.594997236, -909505.2644025753, 5016168.94481226],
 		zoom: 12,
-		minZoom: 4,
-		maxZoom: 22
+		minZoom: 10,
+		maxZoom: 20
 	})
-
 	//Definição do mapa
 	map = new ol.Map({
 		layers: layersBase,
@@ -244,24 +234,19 @@ function init() {
 		];
 
 		return function (feature, resolution) {
-			if (feature != undefined) {
-				switch (feature.get('tipo')) {
-					case 'cafe':
-						return cafeStyle;
-						break;
-					case 'restaurante':
-						return restauranteStyle;
-						break;
-					default:
-						return estadioStyle;
-						break;
-				}
-			} else {
-				return estadioStyle;
+			switch (feature.get('tipo')) {
+				case 'cafe':
+					return cafeStyle;
+					break;
+				case 'restaurante':
+					return restauranteStyle;
+					break;
+				default:
+					return estadioStyle;
+					break;
 			}
-
 		};
-	})();
+	});
 
 	//definição do layer dos estadios
 	var sourceEstadios = new ol.source.Vector({
@@ -399,6 +384,9 @@ function init() {
 	select.getFeatures().on(['add'], function (e) {
 		var feature = e.element;
 		var content = "";
+		if (typeof feature.get("tipo") !== 'undefined') {
+			content += feature.get("tipo ");
+		}
 		content += feature.get("nome");
 		popup.show(feature.getGeometry().getCoordinates(), content);
 	})

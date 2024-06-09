@@ -23,7 +23,7 @@ FROM (
   SELECT jsonb_build_object(
     'type',       'Feature',
     'id',         osm_id,
-    'geometry',   ST_AsGeoJSON(ST_Transform(geom, 4326))::jsonb,
+    'geometry',   ST_AsGeoJSON(geom)::jsonb,
     'properties', to_jsonb(inputs)- 'osm_id' - 'geom'
   ) AS feature
   FROM (SELECT * FROM amenities) inputs) features;") or die('Query failed: ' . pg_last_error());
