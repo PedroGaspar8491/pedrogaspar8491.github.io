@@ -65,11 +65,14 @@
 		}
 
 		#toolbox {
-			position: absolute;
-			top: 8px;
-			right: 50px;
-			padding: 3px;
-			border-radius: 4px;
+    		position: absolute;
+    		top: 8px;
+    		right: 50px;
+    		padding: 3px;
+    		border-radius: 8px;
+    		background: rgba(0, 0, 0, 0.8);
+    		z-index: 100;
+    		box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 		}
 
 		#sl1Slider .slider-selection {
@@ -91,35 +94,50 @@
 			}
 
 		}
+
+        .legenda{
+			align-content: center;
+			border-radius: 10px;
+			top: 300px;
+			right: 1315px;
+			position: absolute;
+			background: #005500; 
+			height: 170px;
+			width: 150px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+		}
+
+		.legenda img{
+			padding-left: 5px;
+			padding-bottom: 5px;
+			height: 50px;
+			width: 50px;
+		}
 	</style>
 </head>
 
 <body onload="init()">
-	<div id="toolbox" style="position:absolute; top:8px; right:90px; padding:3px;
-			border-radius:4px; color:#fff; background: rgba(255, 255, 255, 0.4);
-			z-index:100;">
-		<ul id="layerswitcher" style="margin:0; padding:10px; border-radius:4px;
-				background:rgba(0, 60, 136, 0.5); list-style-type:none;">
-			<li><label><input type="radio" name="layer" value="0" checked> Satélite</label></li>
+	<div id="toolbox" style="position:absolute; top:8px; right:50px; padding:3px; border-radius:8px; background: #005500; z-index:100; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);">
+		<ul id="layerswitcher" style="margin:0; padding:10px; border-radius:8px; background:#004400; list-style-type:none; color:#fff;">
+	
+			<li style="margin-bottom: 5px;"><label><input type="radio" name="layer" value="0" checked> Satélite</label></li>
 			<li><label><input type="radio" name="layer" value="1"> Mapa</label></li>
 		</ul>
 	</div>
-	<div style="position:absolute; top:8px; left:90px; padding:3px;
-			border-radius:4px; color:#fff; background: rgba(255, 255, 255, 0.4);
-			z-index:100;">
-		<select id="estadio" class="estadioSelect">
+	
+	
+	
+	<div style="position:absolute; top:8px; left:90px; padding:3px; border-radius:8px; color:#ecf0f1; background: rgba(0, 0, 0, 0.8); z-index:100; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);">
+		<select id="estadio" class="estadioSelect" style="width: 100%; padding: 5px; border: 1px solid #000; border-radius: 8px; background: #006400; color: #fff;">
 			<option value="" selected>Selecione um Estádio</option>
 			<option value="-8.5029389047672037,40.877649513223759">Estádio de Cucujães</option>
 			<option value="-8.582205650824386,40.999772566839546">Parque da Concórdia</option>
 			<option value="-8.462924256096517,40.879234242722539">Complexo Desportivo do Calvário</option>
-			<option value="-8.543626255748318,40.987344244943124">Estádio do Lusitânia Futebol Clube Lourosa
-			</option>
+			<option value="-8.543626255748318,40.987344244943124">Estádio do Lusitânia Futebol Clube Lourosa</option>
 			<option value="-8.568942181567625,40.759332571909887">Estádio Tavares da Silva</option>
 			<option value="-8.551988736881659,40.872658820078478">Campo Dr. Oliveira Santos</option>
-			<option value="-8.490162944456314,40.918817529785862">Estádio Maria Carolina Leite Resende Garcia
-			</option>
-			<option value="-8.684639985372506,40.594309642804028">Campo de Futebol Municipal da Vista Alegre
-			</option>
+			<option value="-8.490162944456314,40.918817529785862">Estádio Maria Carolina Leite Resende Garcia</option>
+			<option value="-8.684639985372506,40.594309642804028">Campo de Futebol Municipal da Vista Alegre</option>
 			<option value="-8.605387355823716,40.810734143485462">Parque Desportivo da AA Avanca</option>
 			<option value="-8.416808514425542,40.521272149325377">Parque de Jogos da Canada</option>
 			<option value="-8.449160595075112,40.614709793470723">Estádio Manuel Castro Azevedo</option>
@@ -133,27 +151,27 @@
 			<option value="-8.611263680179087,40.830822849834412">Complexo Desportivo do Sargaçal</option>
 			<option value="-8.411732203697177,40.620443031422568">Estádio Bastos Xavier</option>
 			<option value="-8.394872022945815,40.402374232001051">Estádio Vale das Cavadas</option>
-
-
 		</select>
 	</div>
+	
+	
 	<div id='mapa' style="width:100%; height:100%; z-index: 0">
-		<div id="toolbox1" class="btn-toolbar" style="position:absolute; top:150px;
-				right:50px; padding:3px; border-radius:4px; color:#fff; background:
-				rgba(255, 255, 255, 0.4); z-index:100;">
-			<div id="meio_transporte" class="btn-group" data-toggle="buttons" style="margin:0; padding:10px; border-radius:4px; background:rgba(0, 60,
-					136, 0.5);">
-				<label class="btn btn-default active">
-					<input type="radio" class="btn btn-default active" name="options" checked id="option1" value="ape">A
-					pé
+		<div id="toolbox1" class="btn-toolbar" style="position:absolute; top:150px; right:50px; padding:3px; border-radius:8px; color:#ecf0f1; background: rgba(0, 0, 0, 0.8); z-index:100; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);">
+			<div id="meio_transporte" class="btn-group" data-toggle="buttons" style="margin:0; padding:10px; border-radius:8px; background:#004400;">
+				<label class="btn btn-default active" style="border: 1px solid #003300; border-radius: 8px; margin-right: 5px; background-color: #228B22; color: #fff;">
+					<input type="radio" class="btn btn-default active" name="options" checked id="option1" value="ape"> A pé
 				</label>
-				<label class="btn btn-default">
-					<input type="radio" class="btn btn-default" name="options" id="option2" value="bicicleta">Bicicleta
+				<label class="btn btn-default" style="border: 1px solid #003300; border-radius: 8px; margin-right: 5px; background-color: #1E90FF; color: #fff;">
+					<input type="radio" class="btn btn-default" name="options" id="option2" value="bicicleta"> Bicicleta
 				</label>
-				<label class="btn btn-default">
-					<input type="radio" class="btn btn-default" name="options" id="option3" value="carro">Automóvel
+				<label class="btn btn-default" style="border: 1px solid #003300; border-radius: 8px; background-color: #FF4500; color: #fff;">
+					<input type="radio" class="btn btn-default" name="options" id="option3" value="carro"> Automóvel
 				</label>
 			</div>
+			
+		</div>
+		
+		
 
 		</div>
 
@@ -175,6 +193,12 @@
 				});
 			</script>
 
+
+<div class="legenda">
+	<div class="estadio"><img src="./img/stadium.png"> Estádios</div>
+	<div class="cafe"><img src="./img/cafe.png"> Cafés</div>
+	<div class="restaurante"><img src="./img/restaurant.png"> Restaurantes</div>
+</div>
 
 
 </body>
