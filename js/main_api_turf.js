@@ -389,25 +389,21 @@ function init() {
 		x_dest = parseFloat(estadio[0]);
 		y_dest = parseFloat(estadio[1]);
 
-		pontoInicial.setGeometry(null);
-		hull.setVisible(false);
-
-
 		if (estadio != ['']) {
 			pontoInicial.setGeometry(null);
 
 			if (pontoInicial.getGeometry() == null) {
 				coordsDestino = [x_dest, y_dest];
-				pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
+				pontoInicial.set('geometry', new ol.geom.Point([coordinate[0], coordinate[1]]));
 
 				if (opção == 'carro') {
-					update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
+					update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer)
 
 				} else if ($("input[name='options']:checked").val() == 'ape') {
-					update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+					update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer);
 
 				} else if (opção == 'bicicleta') {
-					update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+					update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinate, hull, routing, buffer, source_buffer);
 				}
 			}
 
@@ -439,10 +435,9 @@ function init() {
 		estadio = estadio.split(",");
 		x_dest = parseFloat(estadio[0]);
 		y_dest = parseFloat(estadio[1]);
-		console.log(estadio);
 		if (estadio != ['']) {
 			pontoInicial.setGeometry(null);
-
+			console.log(estadio);
 			if (pontoInicial.getGeometry() == null) {
 				coordsDestino = [x_dest, y_dest];
 				pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
@@ -470,24 +465,25 @@ function init() {
 		x_dest = parseFloat(estadio[0]);
 		y_dest = parseFloat(estadio[1]);
 
-		pontoInicial.setGeometry(null);
-		hull.setVisible(false);
+		if (estadio != ['']) {
+			pontoInicial.setGeometry(null);
 
+			if (pontoInicial.getGeometry() == null) {
+				coordsDestino = [x_dest, y_dest];
+				pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
 
-		if (pontoInicial.getGeometry() == null) {
-			coordsDestino = [x_dest, y_dest];
-			pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
+				if (opção == 'carro') {
+					update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
 
+				} else if ($("input[name='options']:checked").val() == 'ape') {
+					update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 
-			if (opção == 'carro') {
-				update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
-
-			} else if ($("input[name='options']:checked").val() == 'ape') {
-				update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
-
-			} else if (opção == 'bicicleta') {
-				update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+				} else if (opção == 'bicicleta') {
+					update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+				}
 			}
+
+
 		}
 	});
 
@@ -500,22 +496,25 @@ function init() {
 			x_dest = parseFloat(estadio[0]);
 			y_dest = parseFloat(estadio[1]);
 
-			pontoInicial.setGeometry(null);
+			if (estadio != ['']) {
+				pontoInicial.setGeometry(null);
 
-			if (pontoInicial.getGeometry() == null) {
-				coordsDestino = [x_dest, y_dest];
-				pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
+				if (pontoInicial.getGeometry() == null) {
+					coordsDestino = [x_dest, y_dest];
+					pontoInicial.set('geometry', new ol.geom.Point([coordinates[0], coordinates[1]]));
 
+					if (opção == 'carro') {
+						update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
 
-				if (opção == 'carro') {
-					update_map(coordsDestino, "auto", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer)
+					} else if ($("input[name='options']:checked").val() == 'ape') {
+						update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
 
-				} else if ($("input[name='options']:checked").val() == 'ape') {
-					update_map(coordsDestino, "pedestrian", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
-
-				} else if (opção == 'bicicleta') {
-					update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+					} else if (opção == 'bicicleta') {
+						update_map(coordsDestino, "bicycle", estadiosLayer, amenitiesLayer, layerVetorial, source_routing, source_hull, sourceAmenity, sourceEstadios, coordinates, hull, routing, buffer, source_buffer);
+					}
 				}
+
+
 			}
 		});
 
